@@ -19,14 +19,15 @@ fun generateBorderWalls(maze: Array<IntArray>): Array<IntArray> {
     return maze
 }
 
-fun generateEnterAndExit(maze: Array<IntArray>): Array<IntArray> {
+fun generateRandomEnterAndExit(maze: Array<IntArray>): Array<IntArray> {
     val width = maze.size
     val height = maze[0].size
-    val enter = Pair(1, 0)
-    val exit = Pair(width - 2, height - 1)
+    val enter = Pair(0, (1 until height - 1).random())
+    val exit = Pair(width - 1, (1 until height - 1).random())
     maze[enter.first][enter.second] = 0
     maze[exit.first][exit.second] = 0
     return maze
+
 }
 
 fun generateMaze(width: Int, height: Int): Array<IntArray> {
@@ -51,7 +52,7 @@ fun generateMaze(width: Int, height: Int): Array<IntArray> {
     }
 
     generateBorderWalls(maze)
-    generateEnterAndExit(maze)
+    generateRandomEnterAndExit(maze)
 
     return maze
 }
