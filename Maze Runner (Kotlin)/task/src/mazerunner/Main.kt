@@ -66,14 +66,8 @@ fun removeWalls(current: Pair<Int, Int>, next: Pair<Int, Int>, maze: Array<IntAr
 }
 
 fun printMaze(maze: Array<IntArray>) {
-    for (row in maze) {
-        for (cell in row) {
-            if (cell == 1) {
-                print("\u2588\u2588")
-            } else {
-                print("  ")
-            }
-        }
-        println()
+    maze.forEach { row ->
+        println(row.joinToString(separator = "") { if (it == 1) "\u2588\u2588" else "  " })
     }
+
 }
