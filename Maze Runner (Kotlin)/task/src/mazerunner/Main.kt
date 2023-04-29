@@ -29,7 +29,6 @@ fun generateEnterAndExit(maze: Array<IntArray>): Array<IntArray> {
     return maze
 }
 
-
 fun generateMaze(width: Int, height: Int): Array<IntArray> {
     val maze = Array(width) { i -> IntArray(height) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
     val start = Pair(1, 1)
