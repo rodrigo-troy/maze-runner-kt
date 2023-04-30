@@ -1,37 +1,53 @@
 package mazerunner
 
 fun main() {
-    val maze = generateMaze(9, 9)
+    val maze = generateMaze(10, 10)
     printMaze(maze)
 }
 
-fun generateBorderWalls(maze: Array<IntArray>): Array<IntArray> {
+fun generateEnterAndExit(maze: Array<IntArray>): Array<IntArray> {
     val width = maze.size
     val height = maze[0].size
-    for (i in 0 until width) {
-        maze[i][0] = 1
-        maze[i][height - 1] = 1
-    }
-    for (j in 0 until height) {
-        maze[0][j] = 1
-        maze[width - 1][j] = 1
-    }
-    return maze
-}
-
-fun generateRandomEnterAndExit(maze: Array<IntArray>): Array<IntArray> {
-    val width = maze.size
-    val height = maze[0].size
-    val enter = Pair(0, (1 until height - 1).random())
-    val exit = Pair(width - 1, (1 until height - 1).random())
+    val enter = Pair(1, 0)
+    val exit = Pair(width - 2, height - 1)
     maze[enter.first][enter.second] = 0
     maze[exit.first][exit.second] = 0
     return maze
+}
 
+fun swapRows(maze: Array<IntArray>, row1: Int, row2: Int) {
+    val temp = maze[row1]
+    maze[row1] = maze[row2]
+    maze[row2] = temp
+}
+
+fun swapColumns(maze: Array<IntArray>, col1: Int, col2: Int) {
+    for (i in maze.indices) {
+        val temp = maze[i][col1]
+        maze[i][col1] = maze[i][col2]
+        maze[i][col2] = temp
+    }
+}
+
+fun checkRowHasSpaces(maze: Array<IntArray>, row: Int): Boolean {
+    return maze[row].any { it == 0 }
+}
+
+fun checkColumnHasSpaces(maze: Array<IntArray>, col: Int): Boolean {
+    return maze.any { it[col] == 0 }
 }
 
 fun generateMaze(width: Int, height: Int): Array<IntArray> {
-    val maze = Array(width) { i -> IntArray(height) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
+    val maze = Array(height) { i -> IntArray(width) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
+
+    if (checkRowHasSpaces(maze, height - 1)) {
+        swapRows(maze, height - 2, height - 1)
+    }
+
+    if (checkColumnHasSpaces(maze, width - 1)) {
+        swapColumns(maze, width - 2, width - 1)
+    }
+
     val start = Pair(1, 1)
     val stack = mutableListOf(start)
     val visited = mutableSetOf(start)
@@ -40,7 +56,7 @@ fun generateMaze(width: Int, height: Int): Array<IntArray> {
     while (stack.isNotEmpty()) {
         val current = stack.removeLast()
         val unvisitedNeighbors = directions.map { Pair(current.first + it.first, current.second + it.second) }
-            .filter { it.first in 1 until width - 1 && it.second in 1 until height - 1 && it !in visited }
+            .filter { it.first in 1 until height - 1 && it.second in 1 until width - 1 && it !in visited }
 
         if (unvisitedNeighbors.isNotEmpty()) {
             val next = unvisitedNeighbors.random()
@@ -51,8 +67,7 @@ fun generateMaze(width: Int, height: Int): Array<IntArray> {
         }
     }
 
-    generateBorderWalls(maze)
-    generateRandomEnterAndExit(maze)
+    generateEnterAndExit(maze)
 
     return maze
 }
@@ -70,4 +85,5 @@ fun printMaze(maze: Array<IntArray>) {
         println(row.joinToString(separator = "") { if (it == 1) "\u2588\u2588" else "  " })
     }
 
+    println()
 }
