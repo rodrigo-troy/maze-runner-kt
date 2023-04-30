@@ -365,7 +365,6 @@ class Maze {
 class Clue {
     int height;
     int width;
-
     Clue(int h, int w) {
         height = h;
         width = w;

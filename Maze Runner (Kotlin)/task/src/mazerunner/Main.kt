@@ -1,7 +1,12 @@
 package mazerunner
 
 fun main() {
-    val maze = generateMaze(10, 10)
+    println("Please, enter the size of a maze")
+
+    val (height, width) = readln().split(" ").map { it.toInt() }
+
+    val maze = generateMaze(height, width)
+
     printMaze(maze)
 }
 
@@ -37,7 +42,7 @@ fun checkColumnHasSpaces(maze: Array<IntArray>, col: Int): Boolean {
     return maze.any { it[col] == 0 }
 }
 
-fun generateMaze(width: Int, height: Int): Array<IntArray> {
+fun generateMaze(height: Int, width: Int): Array<IntArray> {
     val maze = Array(height) { i -> IntArray(width) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
 
     if (checkRowHasSpaces(maze, height - 1)) {
