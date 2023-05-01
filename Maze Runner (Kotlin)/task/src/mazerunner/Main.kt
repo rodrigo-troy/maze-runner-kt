@@ -1,5 +1,7 @@
 package mazerunner
 
+import java.io.File
+
 fun main() {
     var maze: Maze? = null
 
@@ -15,15 +17,18 @@ fun main() {
                 println("Enter the size of a new maze: ")
                 val size = readln().toInt()
                 maze = Maze(size, size)
-                maze.generateMaze(size, size)
                 maze.printMaze()
             }
 
             2 -> {
                 print("Enter file name: ")
                 val fileName = readln()
-                maze = Maze(fileName)
-                maze.printMaze()
+
+                try {
+                    maze = Maze(File(fileName))
+                } catch (e: Exception) {
+                    println("The file $fileName does not exist")
+                }
             }
 
             3 -> {

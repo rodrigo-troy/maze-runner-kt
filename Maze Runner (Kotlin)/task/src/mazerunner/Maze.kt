@@ -9,15 +9,20 @@ import java.io.File
  * Date: 01-05-23
  * Time: 13:20
  */
-class Maze(height: Int, width: Int) {
-    private var maze: Array<IntArray>
+class Maze {
+    private val maze: Array<IntArray>
 
-    constructor(filename: String) : this(0, 0) {
-        loadMazeFromFile(filename)
+    constructor(height: Int, width: Int) {
+        this.maze = Array(height) { i -> IntArray(width) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
+        generateMaze()
     }
 
-    init {
-        maze = Array(height) { i -> IntArray(width) { j -> if (i % 2 == 0 || j % 2 == 0) 1 else 0 } }
+    constructor(maze: Array<IntArray>) {
+        this.maze = maze
+    }
+
+    constructor(file: File) {
+        this.maze = file.readLines().map { it.split(" ").map { it.toInt() }.toIntArray() }.toTypedArray()
     }
 
     private fun removeWalls(current: Pair<Int, Int>, next: Pair<Int, Int>, maze: Array<IntArray>) {
@@ -38,7 +43,10 @@ class Maze(height: Int, width: Int) {
         println()
     }
 
-    fun generateMaze(height: Int, width: Int) {
+    private fun generateMaze() {
+        val height = maze.size
+        val width = maze[0].size
+
         if (checkRowHasSpaces(height - 1)) {
             swapRows(height - 2, height - 1)
         }
@@ -100,27 +108,6 @@ class Maze(height: Int, width: Int) {
         return maze.any { it[col] == 0 }
     }
 
-    private fun loadMazeFromFile(filename: String) {
-        val file = File(filename)
-
-        if (!file.exists()) {
-            println("The file $filename does not exist")
-            return
-        }
-
-        val lines = file.readLines()
-        val height = lines.size
-        val width = lines[0].length
-
-        maze = Array(height) { IntArray(width) }
-
-        for (i in 0 until height) {
-            for (j in 0 until width) {
-                maze[i][j] = if (lines[i][j] == ' ') 0 else 1
-            }
-        }
-    }
-
     fun saveMazeToFile(filename: String) {
         val file = File(filename)
 
@@ -129,14 +116,6 @@ class Maze(height: Int, width: Int) {
             return
         }
 
-        val lines = mutableListOf<String>()
-
-        for (i in maze.indices) {
-            val line = maze[i].joinToString(separator = "") { if (it == 1) "\u2588\u2588" else "  " }
-            lines.add(line)
-        }
-
-        file.writeText(lines.joinToString(separator = "\n"))
+        file.writeText(maze.joinToString(separator = "\n") { it.joinToString(separator = " ") })
     }
-
 }
