@@ -111,11 +111,6 @@ class Maze {
     fun saveMazeToFile(filename: String) {
         val file = File(filename)
 
-        if (!file.exists()) {
-            println("The file $filename does not exist")
-            return
-        }
-
         file.writeText(maze.joinToString(separator = "\n") { it.joinToString(separator = " ") })
     }
 }
