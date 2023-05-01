@@ -29,6 +29,8 @@ class Maze(height: Int, width: Int) {
     }
 
     fun printMaze() {
+        println()
+
         maze.forEach { row ->
             println(row.joinToString(separator = "") { if (it == 1) "\u2588\u2588" else "  " })
         }

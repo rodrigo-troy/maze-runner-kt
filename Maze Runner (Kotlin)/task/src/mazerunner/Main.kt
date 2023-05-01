@@ -12,7 +12,7 @@ fun main() {
 
         when (readln().toInt()) {
             1 -> {
-                print("Enter the size of a new maze: ")
+                println("Enter the size of a new maze: ")
                 val size = readln().toInt()
                 maze = Maze(size, size)
                 maze.generateMaze(size, size)
