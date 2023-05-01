@@ -41,6 +41,10 @@ fun main() {
                 maze?.printMaze()
             }
 
+            5 -> {
+                maze?.findEscape()
+            }
+
             0 -> {
                 println("Bye!")
                 return
@@ -67,6 +71,7 @@ fun printFullMenu() {
     println("2. Load a maze")
     println("3. Save the maze")
     println("4. Display the maze")
+    println("5. Find the escape")
     println("0. Exit")
 }
 

@@ -365,7 +365,6 @@ class Clue {
     int size;
     boolean withPath;
     int count;
-
     Clue(int s, int c, boolean wp) {
         size = s;
         count = c;

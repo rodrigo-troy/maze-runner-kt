@@ -36,8 +36,14 @@ class Maze {
     fun printMaze() {
         println()
 
-        maze.forEach { row ->
-            println(row.joinToString(separator = "") { if (it == 1) "\u2588\u2588" else "  " })
+        for (row in maze) {
+            for (cell in row) {
+                if (cell == 1) print("\u2588\u2588")
+                if (cell == 0) print("  ")
+                if (cell == 2) print("//")
+            }
+
+            println()
         }
 
         println()
@@ -111,6 +117,58 @@ class Maze {
     fun saveMazeToFile(filename: String) {
         val file = File(filename)
 
+        for (i in maze.indices) {
+            for (j in maze[i].indices) {
+                if (maze[i][j] == 2) {
+                    maze[i][j] = 0
+                }
+            }
+        }
+
         file.writeText(maze.joinToString(separator = "\n") { it.joinToString(separator = " ") })
+    }
+
+
+    fun findEscape() {
+        val height = maze.size
+        val width = maze[0].size
+        val start = Pair(1, 0)
+        val end = Pair(width - 2, height - 1)
+        val stack = mutableListOf(start)
+        val visited = mutableSetOf(start)
+        val directions = listOf(Pair(1, 0), Pair(0, 1), Pair(-1, 0), Pair(0, -1))
+        val path = mutableListOf(start)
+
+        while (stack.isNotEmpty()) {
+            val current = stack.removeLast()
+            val unvisitedNeighbors = directions.map { Pair(current.first + it.first, current.second + it.second) }
+                .filter { it.first in 0 until height && it.second in 0 until width && it !in visited && maze[it.first][it.second] == 0 }
+
+            if (current == end) {
+                break
+            }
+
+            if (unvisitedNeighbors.isNotEmpty()) {
+                val next = unvisitedNeighbors.random()
+                visited.add(next)
+                stack.add(current)
+                stack.add(next)
+                path.add(next)
+            } else {
+                path.removeLast()
+            }
+        }
+
+        if (path.last() == end) {
+            println("The exit is found!")
+        } else {
+            println("There is no exit!")
+        }
+
+        for (i in path.indices) {
+            maze[path[i].first][path[i].second] = 2
+        }
+
+        printMaze()
     }
 }
