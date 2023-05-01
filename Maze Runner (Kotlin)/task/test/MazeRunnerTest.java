@@ -363,7 +363,6 @@ class Maze {
 
 class Clue {
     int size;
-
     Clue(int s) {
         size = s;
     }
